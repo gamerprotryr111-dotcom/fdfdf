@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Живой каньон</title>
+<style>
+:root{--glass:rgba(10,34,24,.5);--dark:#0f3a2c;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--glass:rgba(6,22,16,.62)}}
+:root[data-theme="dark"]{--glass:rgba(6,22,16,.62)}
+*{box-sizing:border-box}html,body{margin:0;background:#3aa6d8}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#f2fff4}
+main{position:relative;height:max(340vw,300vh);overflow:hidden}
+svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+h1,h2{font-family:Georgia,"Times New Roman",serif;margin:0 0 .5rem}
+.card{position:absolute;left:50%;transform:translateX(-50%);width:min(30rem,88vw);padding:1.3rem 1.5rem;border-radius:20px;background:var(--glass);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.card h2{font-size:1.5rem}.card p{margin:0;line-height:1.55}
+.hero{position:absolute;left:50%;transform:translateX(-50%);top:max(3vh,calc(env(safe-area-inset-top,0px) + 14px));width:min(40rem,90vw);text-align:center;color:var(--dark);text-shadow:0 1px 12px rgba(255,255,255,.7)}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;margin:0}
+.hero p{margin:.5rem 0 0;font-size:clamp(.95rem,2vw,1.15rem)}
+.pill{position:fixed;z-index:5;top:calc(12px + env(safe-area-inset-top,0px));right:12px;padding:.5rem .9rem;border-radius:999px;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);font-size:.9rem}
+.pill i{display:block;height:3px;margin-top:5px;border-radius:2px;background:#8be0a5;transform-origin:left;transform:scaleX(var(--p,0))}
+button{margin-top:.9rem;padding:.6rem 1.1rem;border:0;border-radius:999px;background:#8be0a5;color:#0b2a1d;font:inherit;font-weight:600;cursor:pointer}
+.ck{display:flex;gap:.6rem;margin:.4rem 0;line-height:1.35;cursor:pointer}.ck input{accent-color:#8be0a5;width:1.1rem;height:1.1rem;flex:none;margin-top:.15rem}
+#cn{margin:.6rem 0 0;font-size:.9rem;opacity:.85}
+.fl{animation:fl linear infinite}@keyframes fl{to{stroke-dashoffset:-200}}
+.dr{animation:dr 26s ease-in-out infinite alternate}@keyframes dr{to{transform:translateX(70px)}}
+.pl,.rg,.hop,.bd,.fp,.jp{transform-box:fill-box;transform-origin:center}
+.pl{animation:pl 2.4s ease-in-out infinite}@keyframes pl{50%{transform:scale(1.15);opacity:.9}}
+.rg{animation:rg 3.2s ease-out infinite}@keyframes rg{from{transform:scale(.3);opacity:.9}to{transform:scale(1.8);opacity:0}}
+.sp{animation:sp 1.5s ease-out infinite}@keyframes sp{from{transform:translateY(0);opacity:.9}to{transform:translateY(-90px);opacity:0}}
+.ff{animation:ff 3s ease-in-out infinite}@keyframes ff{50%{opacity:1;transform:translate(8px,-10px)}}
+.wv{animation:wv 7s linear infinite}@keyframes wv{to{transform:translateX(-200px)}}
+.sw{animation:sw 5s ease-in-out infinite alternate}@keyframes sw{to{transform:translateY(3px)}}
+.lj{animation:lj 5s ease-in-out infinite alternate}@keyframes lj{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
+.sg{animation:sg 3.5s ease-in-out infinite alternate}@keyframes sg{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.fy{animation:fy linear infinite}@keyframes fy{to{transform:translateX(1450px)}}
+.wr,.wl{transform-origin:0px 0px;animation-duration:.5s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate}.wr{animation-name:wr}.wl{animation-name:wl}@keyframes wr{from{transform:rotate(-32deg)}to{transform:rotate(38deg)}}@keyframes wl{from{transform:rotate(32deg)}to{transform:rotate(-38deg)}}
+.wd{animation:wd ease-in-out infinite alternate}@keyframes wd{to{transform:translate(70px,-50px)}}
+.fp{animation:fp .35s ease-in-out infinite alternate}@keyframes fp{to{transform:scaleY(.2)}}
+.hop{animation:hop 2.6s ease-in-out infinite}@keyframes hop{40%,100%{transform:translateY(0)}20%{transform:translateY(-16px)}}
+.jp{animation:jp 7s ease-in-out infinite;opacity:0}@keyframes jp{0%{opacity:0;transform:translate(0,0) rotate(-60deg)}8%{opacity:1}30%{transform:translate(35px,-90px) rotate(0)}55%{opacity:1;transform:translate(70px,0) rotate(60deg)}60%,100%{opacity:0;transform:translate(70px,0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head>
+<body>
+<div class="pill" id="alt">⛰ <b>480</b> м<i></i></div>
+<main><div id="top" style="position:absolute;top:0;height:1px"></div>
+<svg viewBox="0 0 1200 5000" preserveAspectRatio="none" aria-hidden="true">
+<defs>
+<linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d8f0"/><stop offset=".06" stop-color="#d6efe6"/><stop offset=".14" stop-color="#a6d3b4"/><stop offset=".4" stop-color="#5da56d"/><stop offset=".75" stop-color="#2f7448"/><stop offset=".87" stop-color="#1a5a40"/><stop offset="1" stop-color="#3aa6d8"/></linearGradient>
+<radialGradient id="sn"><stop offset="0" stop-color="#fff7c2" stop-opacity=".95"/><stop offset="1" stop-color="#fff7c2" stop-opacity="0"/></radialGradient>
+<linearGradient id="rk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b6358"/><stop offset=".5" stop-color="#8a8070"/><stop offset="1" stop-color="#5d554b"/></linearGradient>
+<linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset=".05" stop-color="#1e6a36" stop-opacity="0"/><stop offset="1" stop-color="#1e6a36" stop-opacity=".7"/></linearGradient>
+<linearGradient id="ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8fff0" stop-opacity="0"/><stop offset=".5" stop-color="#e8fff0" stop-opacity=".38"/><stop offset="1" stop-color="#e8fff0" stop-opacity="0"/></linearGradient>
+<linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#bfe9ff"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#a6dcf5"/></linearGradient>
+<linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f4ff"/><stop offset=".35" stop-color="#8fdcf5"/><stop offset="1" stop-color="#3aa6d8"/></linearGradient>
+<filter id="bl"><feGaussianBlur stdDeviation="14"/></filter>
+<g id="tr"><path d="M-22,0 Q-10,-8 -7,-40 L-6,-150 L6,-150 L7,-40 Q10,-8 22,0Z" fill="#4a3424"/><path d="M0,-90 L-40,-130 M0,-110 L38,-150" stroke="#4a3424" stroke-width="5"/><ellipse cy="-190" rx="62" ry="52" fill="#2f7d3e"/><ellipse cx="-45" cy="-150" rx="42" ry="34" fill="#37894a"/><ellipse cx="46" cy="-155" rx="40" ry="32" fill="#2a7138"/><ellipse cx="-8" cy="-215" rx="38" ry="30" fill="#45a058"/></g>
+</defs>
+<rect width="1200" height="5000" fill="url(#sk)"/>
+<circle cx="930" cy="170" r="170" fill="url(#sn)"/><circle cx="930" cy="170" r="34" fill="#fffbe0"/>
+<g id="cl"></g><g id="rg"></g><g id="wl"></g><g id="tp"></g><g id="br" class="sw"></g><g id="rv"></g><g id="fl"></g><g id="lk"></g><g id="nr"></g><g id="an"></g><g id="ff"></g><g id="fg"></g>
+</svg>
+<section class="hero"><h1>Живой каньон</h1><p>Лес, вода и сотни видов, которые зависят друг от друга. Спуститесь вниз и посмотрите, что нужно защищать.</p><button id="go">Начать спуск ↓</button></section>
+<section class="card" id="c1" style="top:17%"><h2>Верхушки деревьев</h2><p>Кроны — крыша леса. Они держат тень и влагу, задерживают дождь и дают дом птицам. Срубите самые высокие деревья — и климат внизу изменится.</p></section>
+<section class="card" style="top:35%"><h2>Лианы и стволы</h2><p>Лианы и ветви — дороги для обезьян, ленивцев и множества насекомых. Сплошные вырубки рвут эти пути и делят лес на острова.</p></section>
+<section class="card" style="top:52%"><h2>Вода начинается в лесу</h2><p>Корни и лесная подстилка впитывают дождь, а потом отдают воду ручьям и водопаду. Без леса ливни смывают почву, и вода мутнеет.</p></section>
+<section class="card" style="top:68%"><h2>Кто здесь живёт</h2><p>Тукан на ветке, обезьяна на лиане, ленивец, ягуар, цапля, лягушка и рыбы в озере. Исчезнет одно звено — пострадают и другие.</p></section>
+<section class="card" style="top:auto;bottom:max(2rem,4vh)"><h2>Озеро — итог пути</h2><p>Чистая вода — признак здорового леса. Отметьте, что готовы делать:</p>
+<label class="ck"><input type="checkbox">Беру меньше одноразового пластика</label>
+<label class="ck"><input type="checkbox">Экономлю воду дома</label>
+<label class="ck"><input type="checkbox">Выбираю бумагу и мебель с маркировкой FSC</label>
+<label class="ck"><input type="checkbox">Не оставляю мусор у воды и в лесу</label>
+<label class="ck"><input type="checkbox">Поддерживаю заповедники и волонтёрские акции</label>
+<p id="cn"></p><button id="up">↑ К мосту</button></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let seed=5;const R=()=>(seed=seed*16807%2147483647)/2147483647,P=(a,b)=>a+R()*(b-a);
+const ex=y=>300+35*Math.sin(y*.006)+12*Math.sin(y*.05),ey=y=>900-30*Math.sin(y*.005+1)+14*Math.sin(y*.045),WL=4380;
+const LY=[{t:'#6f9a86',c:['#7fb89a','#8cc7a8'],w:3,r:[40,65]},{t:'#3f6a54',c:['#3e8a5c','#4f9d6a'],w:4,r:[50,80]},{t:'#4a3424',c:['#2a7a3c','#3a9150'],w:6,r:[65,105]}];
+function tree(x,top,L,hero){const l=LY[L],b=WL+P(0,50),w0=l.w+(hero?3:R()*2),w1=w0*2.2;let s='',j='';
+ s+=`<path d="M${x-w1},${b} Q${x-w0*1.2},${b-60} ${x-w0},${top} L${x+w0},${top} Q${x+w0*1.2},${b-60} ${x+w1},${b}Z" fill="${l.t}"/>`;
+ if(L==2)s+=`<path d="M${x-w1},${b} q-14,6 -34,18 M${x+w1},${b} q14,6 34,18 M${x-w0},${b-8} q-6,16 -18,26 M${x+w0},${b-8} q6,16 18,26" stroke="${l.t}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+ for(let k=0;k<(L+1)*2;k++){const y=P(top+120,b-300),d=R()<.5?-1:1,n=P(30,70);s+=`<path d="M${x},${y} l${d*n},-18" stroke="${l.t}" stroke-width="${w0*.6}"/><ellipse cx="${x+d*n}" cy="${y-24}" rx="${P(22,42)}" ry="${P(14,24)}" fill="${l.c[k%2]}"/>`}
+ for(let k=0;k<5;k++){const rx=P(l.r[0],l.r[1]);s+=`<ellipse cx="${x+P(-.7,.7)*rx}" cy="${top+P(-.4,.3)*rx}" rx="${rx}" ry="${rx*.62}" fill="${l.c[k%2]}"/>`}
+ s+=`<ellipse cx="${x-10}" cy="${top-14}" rx="${l.r[0]*.7}" ry="${l.r[0]*.35}" fill="#a8e6a0" opacity=".25"/>`;
+ if(L>0)for(let k=0;k<(hero?2:1+(R()<.5));k++){const sx=x+P(-40,40),sy=top+25,n=Math.min(P(250,800),b-sy-100),p=`M${sx},${sy} q12,${n/2} -6,${n}`;j+=`<g class="lj" style="transform-origin:${sx}px ${sy}px;animation-delay:-${R()*5}s;animation-duration:${4+R()*3}s"><path d="${p}" stroke="#2f6a35" stroke-width="2.5" fill="none"/><path d="${p}" stroke="#58b25a" stroke-width="7" fill="none" stroke-dasharray="1 9" stroke-linecap="round"/></g>`}
+ return s+j}
+const mist=(a,n)=>Array.from({length:n},(_,i)=>`<rect class="dr" x="-100" y="${a+i*330}" width="1400" height="260" fill="url(#ms)" style="animation-delay:-${i*3}s"/>`).join('');
+let c='';[[300,100],[800,60],[1010,230]].forEach(([x,y])=>c+=`<g class="dr" style="animation-duration:${30+R()*20}s"><ellipse cx="${x}" cy="${y}" rx="80" ry="20" fill="#fff" opacity=".75"/><ellipse cx="${x+40}" cy="${y-14}" rx="55" ry="22" fill="#fff" opacity=".75"/><ellipse cx="${x-40}" cy="${y-8}" rx="45" ry="18" fill="#fff" opacity=".75"/></g>`);$('cl').innerHTML=c;
+let far='',mid='',near='';
+for(let i=0;i<34;i++)far+=tree(P(260,940),650+R()**1.5*2300,0);
+for(let i=0;i<26;i++)mid+=tree(P(300,900),900+R()**1.4*2600,1);
+for(let i=0;i<12;i++)near+=tree(P(370,840),1500+R()*2300,2);
+[[470,2300],[620,1350],[780,1900]].forEach(([x,t])=>near+=tree(x,t,2,1));
+$('rg').innerHTML=far+mist(700,10)+mid+mist(850,9);
+
+// стены
+const L=[],Q=[];for(let y=400;y<=WL+10;y+=40){L.push(ex(y).toFixed(0)+','+y);Q.push(ey(y).toFixed(0)+','+y)}
+const dl='M0,400 L'+L.join(' L')+` L0,${WL+10}Z`,dq='M1200,400 L'+Q.join(' L')+` L1200,${WL+10}Z`;
+let w=`<path d="${dl}" fill="url(#rk)"/><path d="${dq}" fill="url(#rk)"/>`;
+for(let y=440;y<WL;y+=46)w+=`<path d="M0,${y} Q${ex(y)/2},${y+R()*12-6} ${ex(y)},${y}M1200,${y} Q${(1200+ey(y))/2},${y+R()*12-6} ${ey(y)},${y}" stroke="#000" stroke-opacity=".13" stroke-width="2" fill="none"/>`;
+for(let k=0;k<70;k++){const y=P(450,WL),x=P(0,ex(y)),m=P(0,3);w+=`<path d="M${x},${y} l${P(-14,14)},${P(20,70)}" stroke="#000" stroke-opacity=".12" stroke-width="1.5"/>`}
+for(let k=0;k<190;k++){const y=900+R()*3400,l=R()<.5,x=l?R()*ex(y):ey(y)+R()*(1200-ey(y));w+=`<ellipse cx="${x}" cy="${y}" rx="${20+R()*40}" ry="${8+R()*12}" fill="#2f7a3a" opacity="${.2+(y-900)/3400*.4}"/>`}
+w+=`<path d="${dl}" fill="url(#mg)"/><path d="${dq}" fill="url(#mg)"/>`;
+for(let k=0;k<30;k++){const x=k<15?P(230,ex(400)):P(ey(400),1200),n=P(120,520),p=`M${x},400 q8,${n/2} -5,${n}`;w+=`<path d="${p}" stroke="#2f7a3a" stroke-width="3" fill="none"/><path d="${p}" stroke="#4cae55" stroke-width="8" fill="none" stroke-dasharray="1 8" stroke-linecap="round"/>`}
+$('wl').innerHTML=w;
+let t='';[[255,.85],[ey(400)+60,1.15],[ey(400)+160,.9],[1140,1.25]].forEach(([x,s])=>t+=`<use href="#tr" transform="translate(${x},402) scale(${s})"/>`);
+for(let y=900;y<3900;y+=420){let x=ey(y);t+=`<path d="M${x-35},${y} h50 v14 h-50Z" fill="#7d7364"/><use href="#tr" transform="translate(${x-10},${y}) scale(${.4+R()*.2})"/>`;x=ex(y+200);t+=`<path d="M${x-15},${y+200} h50 v14 h-50Z" fill="#7d7364"/><use href="#tr" transform="translate(${x+10},${y+200}) scale(${.4+R()*.2})"/>`}
+$('tp').innerHTML=t;
+
+// мост
+const a=ex(400)-6,b=ey(400)+6,n=b-a,dk=u=>398+76*u*(1-u);
+let g=`<path d="M${a},398 Q${(a+b)/2},436 ${b},398" stroke="#5b3d24" stroke-width="9" fill="none"/><path d="M${a},348 Q${(a+b)/2},386 ${b},348" stroke="#4a3320" stroke-width="3" fill="none"/>`;
+for(let k=0;k<=24;k++){const u=k/24,x=a+n*u;g+=`<path d="M${x},${dk(u)-4} v8" stroke="#8a6238" stroke-width="${n/24-2}"/><path d="M${x},${dk(u)-50} V${dk(u)-4}" stroke="#4a3320" stroke-width="1.5"/>`}
+g+=`<path d="M${a},338 V406 M${b},338 V406" stroke="#3a2616" stroke-width="10"/><circle cx="${a}" cy="332" r="12" fill="#ffd36b" opacity=".35"/><circle cx="${b}" cy="332" r="12" fill="#ffd36b" opacity=".35"/><circle cx="${a}" cy="332" r="5" fill="#ffd36b"/><circle cx="${b}" cy="332" r="5" fill="#ffd36b"/>`;
+$('br').innerHTML=g;
+
+// короткий ручей и узкий водопад
+let r='';
+for(let k=0;k<0;k++)r+=`<path d="M0,${392+k*3} H150" stroke="#fff" stroke-width="2" opacity=".7" stroke-dasharray="${30+k*8} ${170-k*8}" class="fl" style="animation-duration:${1+k*.3}s"/>`;
+r+='<path d="M0,368 C70,362 130,378 190,402 L0,404Z" fill="#4a8a47"/><path d="M0,376 C60,372 120,384 176,402 L206,404 L200,410 C130,396 60,386 0,386Z" fill="#cdeeff"/>';
+for(let k=0;k<4;k++)r+=`<path d="M0,${379+k*2} C60,${375+k*2} 120,${387+k*2} 180,${404+k}" stroke="#fff" stroke-width="2" opacity=".8" fill="none" stroke-dasharray="26 174" class="fl" style="animation-duration:${.9+k*.25}s;animation-delay:-${k*.3}s"/>`;
+[[14,366],[58,366],[104,372],[146,386]].forEach(([x,y])=>r+=`<ellipse cx="${x}" cy="${y}" rx="17" ry="9" fill="#3a7a3a"/>`);
+[404,950,1750,2650,3450].forEach(y=>{r+=`<path d="M108,${y} L252,${y} L246,${y+20} Q214,${y+40} 150,${y+34} Q116,${y+28} 108,${y+8}Z" fill="#564d43"/><path d="M104,${y} L256,${y} L252,${y+8} L108,${y+8}Z" fill="#9a8f7c"/><ellipse cx="124" cy="${y-3}" rx="22" ry="7" fill="#3a7a3a"/><ellipse cx="236" cy="${y-3}" rx="20" ry="7" fill="#3a7a3a"/>`;
+ for(let k=0;k<8;k++){const x=k<4?P(110,138):P(222,252),n=P(30,110),p=`M${x},${y+10} q4,${n/2} -3,${n}`;r+=`<path d="${p}" stroke="#2f7a3a" stroke-width="2.5" fill="none"/><path d="${p}" stroke="#58b25a" stroke-width="7" fill="none" stroke-dasharray="1 8" stroke-linecap="round"/>`}
+ [108,254].forEach((x,j)=>r+=`<path d="M${x},${y+6} v${P(60,120)}" stroke="#fff" stroke-width="2.5" opacity=".8" stroke-dasharray="14 186" class="fl" style="animation-duration:${.8+j*.2}s"/>`)});
+$('rv').innerHTML=r;
+let q=`<path d="M146,404 L200,404 C208,2000 222,3200 232,${WL+20} L134,${WL+20} C146,3200 144,2000 146,404Z" fill="url(#wg)" opacity=".92"/>`;
+for(let k=0;k<12;k++){const u=k/11,d=30+R()*70;q+=`<path d="M${150+u*46},404 L${137+u*92},${WL+20}" stroke="#fff" stroke-width="${1.5+R()*3}" stroke-dasharray="${d} ${200-d}" opacity="${.4+R()*.5}" class="fl" style="animation-duration:${.6+R()*.8}s;animation-delay:-${R()*2}s"/>`}
+[1300,2300,3300].forEach(y=>q+=`<ellipse cx="180" cy="${y}" rx="55" ry="7" fill="#fff" opacity=".45" class="pl"/><ellipse cx="180" cy="${y}" rx="70" ry="30" fill="#fff" opacity=".22" filter="url(#bl)" class="pl"/>`);
+q+='<g filter="url(#bl)"><ellipse cx="172" cy="410" rx="48" ry="20" fill="#fff" opacity=".55"/></g>';$('fl').innerHTML=q;
+
+// озеро
+const wv=' q50,-8 100,0 t100,0'.repeat(9);
+let k=`<path class="wv" d="M-200,${WL}${wv} L1600,5000 L-200,5000Z" fill="url(#lg)"/>`;
+for(let i=0;i<7;i++)k+=`<path class="wv" d="M-200,${WL+50+i*90}${wv}" stroke="#fff" stroke-opacity=".35" stroke-width="2" fill="none"/>`;
+['#e74c3c','#f39c12','#f1e04a','#4cbb5a','#3b9be0','#6c5ce7'].forEach((cl,i)=>{const r=210-i*9;k+=`<path d="M${185-r},${WL+10} A${r},${r} 0 0 1 ${185+r},${WL+10}" stroke="${cl}" stroke-width="9" opacity=".2" fill="none"/>`});
+for(let i=0;i<16;i++){const x=P(380,1120),y=WL+P(60,520);k+=`<ellipse cx="${x}" cy="${y}" rx="${P(16,30)}" ry="${P(5,9)}" fill="#3f9f4e"/>`+(i%4==0?`<circle cx="${x}" cy="${y-5}" r="5" fill="#f7a8c8"/>`:'')}
+for(let i=0;i<44;i++){const x=i<22?P(330,420):P(880,1190),y=WL+P(20,60);k+=`<path d="M${x},${y} q4,-40 ${P(-8,8)},-${P(50,90)}" stroke="#3f8a45" stroke-width="3" fill="none"/>`}
+k+=`<ellipse cx="185" cy="${WL+6}" rx="75" ry="13" fill="#fff" opacity=".8" class="pl"/><ellipse cx="185" cy="${WL-20}" rx="110" ry="40" fill="#fff" opacity=".5" filter="url(#bl)" class="pl"/>`;
+for(let i=0;i<3;i++)k+=`<ellipse cx="185" cy="${WL+20}" rx="70" ry="11" stroke="#fff" stroke-width="2" fill="none" class="rg" style="animation-delay:-${i}s"/>`;
+for(let i=0;i<14;i++)k+=`<circle cx="${P(130,240)}" cy="${WL+8}" r="${P(2,5)}" fill="#fff" class="sp" style="animation-delay:-${R()*1.5}s"/>`;
+$('lk').innerHTML=k;
+const ip=`M322,${WL+32} Q330,${WL-14} 420,${WL-12} Q610,${WL-22} 800,${WL-12} Q890,${WL-12} 898,${WL+32} Q890,${WL+70} 800,${WL+72} Q610,${WL+82} 420,${WL+72} Q330,${WL+70} 322,${WL+32}Z`;
+let island=`<ellipse cx="610" cy="${WL+84}" rx="310" ry="26" fill="#fff" opacity=".45"/><path d="${ip}" transform="translate(0,24)" fill="#5e3f27"/><path d="${ip}" fill="#4f9d4a"/><path d="M340,${WL+20} Q610,${WL-4} 880,${WL+20} Q610,${WL+6} 340,${WL+20}Z" fill="#7bc46a" opacity=".5"/>`;
+for(let i=0;i<70;i++){const x=P(340,880),y=WL+P(0,62);island+=`<path d="M${x},${y} l-3,-9 M${x},${y} l3,-11 M${x},${y} l0,-8" stroke="#2f7a3a" stroke-width="2" stroke-linecap="round"/>`}
+for(let i=0;i<14;i++)island+=`<circle cx="${P(350,870)}" cy="${WL+P(8,60)}" r="2.6" fill="${['#f7a8c8','#ffe36b','#fff'][i%3]}"/>`;
+[[352,WL+66,22,9],[880,WL+68,26,10],[560,WL+76,18,7],[720,WL+76,20,8]].forEach(([x,y,rx,ry])=>island+=`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#8a8579"/><ellipse cx="${x}" cy="${y-3}" rx="${rx*.7}" ry="${ry*.5}" fill="#a9a496"/>`);
+$('nr').innerHTML=island+near+`<path d="M470,2700 h110 M620,1560 h90 M780,2050 h50" stroke="#4a3424" stroke-width="9" stroke-linecap="round"/>`;
+
+// животные
+const bird=(c,d)=>`<g stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"><path class="wr" style="animation-delay:-${d}s" d="M0,0 q6,-9 18,-4"/><path class="wl" style="animation-delay:-${d}s" d="M0,0 q-6,-9 -18,-4"/></g><ellipse rx="4" ry="2.5" fill="${c}"/>`;
+const C=(x,y,r,f)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`;
+let an='';
+const spots=Array.from({length:10},()=>C(P(-34,34),P(-26,-8),P(2,3.5),'#4a2c0a')).join('');
+an+=`<g display="none"><path d="M44,-18 q34,-6 30,20" stroke="#e0a82e" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cy="-16" rx="46" ry="15" fill="#e0a82e"/>${spots}${C(-50,-22,14,'#e0a82e')}${C(-56,-34,4.5,'#e0a82e')}${C(-44,-34,4.5,'#e0a82e')}${C(-56,-24,2,'#222')}${C(-62,-18,2.5,'#222')}<path d="M-28,-4 v12 M-14,-2 v12 M20,-2 v12 M34,-4 v12" stroke="#e0a82e" stroke-width="7" stroke-linecap="round"/></g>`;
+an+=`<g transform="translate(690,1560)"><path d="M-8,-4 L-22,10 L-6,4Z" fill="#1a1a1a"/><ellipse cy="-14" rx="11" ry="16" fill="#1a1a1a"/><ellipse cx="3" cy="-12" rx="6" ry="9" fill="#fff"/>${C(5,-32,8,'#1a1a1a')}<path d="M10,-35 Q34,-37 37,-28 Q24,-24 10,-26Z" fill="#ff9a1f"/>${C(7,-34,2,'#fff')}<path d="M0,0 v6 M5,0 v6" stroke="#444" stroke-width="2"/></g>`;
+an+=`<g transform="translate(545,2700)"><path d="M-6,8 V-4 M8,8 V-4" stroke="#a68b6b" stroke-width="5"/><ellipse cy="18" rx="20" ry="12" fill="#a68b6b"/>${C(-19,22,8,'#d9c3a0')}<path d="M-25,20 h8" stroke="#3a2a1a" stroke-width="3"/><path d="M-14,28 l-3,12 M10,28 l3,12" stroke="#a68b6b" stroke-width="4"/></g>`;
+an+=`<g class="sg" style="transform-origin:810px 2050px"><path d="M810,2050 V2430" stroke="#2f6a35" stroke-width="3"/><path d="M810,2050 V2430" stroke="#58b25a" stroke-width="7" stroke-dasharray="1 9" stroke-linecap="round"/><g transform="translate(810,2430)"><path d="M10,66 q42,0 36,-40 q-4,-16 -14,-14" stroke="#7a4a2a" stroke-width="5" fill="none"/><path d="M0,0 L-2,26" stroke="#7a4a2a" stroke-width="5"/><ellipse cy="52" rx="14" ry="24" fill="#7a4a2a"/>${C(0,24,11,'#7a4a2a')}<ellipse cx="2" cy="26" rx="7" ry="6" fill="#e8c39a"/>${C(0,23,1.6,'#111')}${C(5,23,1.6,'#111')}<path d="M-8,70 q-8,16 -4,26 M8,70 q8,16 4,26" stroke="#7a4a2a" stroke-width="6" fill="none"/></g></g>`;
+an+=`<g display="none"><path d="M-3,0 v-52 M4,0 v-52" stroke="#8a6d3b" stroke-width="2.5"/><ellipse cy="-62" rx="24" ry="11" fill="#f7f7f7"/><path d="M-16,-66 q-22,-6 -14,-34 q4,-14 -8,-18" stroke="#f7f7f7" stroke-width="6" fill="none" stroke-linecap="round"/>${C(-38,-120,6,'#f7f7f7')}<path d="M-43,-120 l-24,5" stroke="#e8a21a" stroke-width="3"/>${C(-40,-122,1.5,'#111')}</g>`;
+an+=`<g transform="translate(700,${WL+150})"><ellipse rx="30" ry="9" fill="#3f9f4e"/><g class="hop"><ellipse cy="-10" rx="11" ry="8" fill="#7bd05a"/>${C(-5,-17,3.5,'#7bd05a')}${C(5,-17,3.5,'#7bd05a')}${C(-5,-17,1.5,'#111')}${C(5,-17,1.5,'#111')}</g></g>`;
+[[560,WL+120],[900,WL+260],[450,WL+340]].forEach(([x,y],i)=>an+=`<g transform="translate(${x},${y})"><g class="jp" style="animation-delay:-${i*2.3}s"><path d="M0,0 q12,-8 24,0 q-12,8 -24,0 M24,0 l9,-7 v14z" fill="#ffb347"/></g></g>`);
+for(let i=0;i<7;i++){const y=P(150,1400);an+=`<g transform="translate(-100,${y})"><g class="fy" style="animation-duration:${22+R()*20}s;animation-delay:-${R()*30}s">${bird(i%3?'#223':'#d9382b',R())}</g></g>`}
+for(let i=0;i<9;i++){const cl=['#ffb347','#f7a8c8','#fff3a0','#7fd4ff'][i%4];an+=`<g transform="translate(${P(380,820)},${P(1500,4000)})"><g class="wd" style="animation-duration:${6+R()*5}s;animation-delay:-${R()*5}s"><ellipse class="fp" cx="-5" rx="6" ry="4" fill="${cl}"/><ellipse class="fp" cx="5" rx="6" ry="4" fill="${cl}"/></g></g>`}
+for(let f=0;f<4;f++){const y=P(40,360),s=1.2+R()*.8;let bs='';[[0,0],[-34,16],[-34,-16],[-68,32],[-68,-32]].forEach(([x,yy],j)=>bs+=`<g transform="translate(${x*s},${yy*s}) scale(${s})">${bird('#2b3a4a',j*.1)}</g>`);an+=`<g transform="translate(-160,${y})"><g class="fy" style="animation-duration:${28+f*7}s;animation-delay:-${f*9}s">${bs}</g></g>`}
+const sp=(()=>{let o='';for(let i=0;i<13;i++){const x=P(-36,34),y=P(-38,-20);o+=`<circle cx="${x}" cy="${y}" r="${P(3,4.4)}" fill="#c9871c" stroke="#4a2c0a" stroke-width="1.6"/><circle cx="${x}" cy="${y}" r="1.1" fill="#4a2c0a"/>`}return o})();
+const lg=(id,c)=>`<g id="${id}"><path d="M0,0 v13" stroke="${c}" stroke-width="7.5" stroke-linecap="round"/><ellipse cy="14" rx="5.5" ry="3" fill="${c}"/><circle cx="-1" cy="6" r="1.4" fill="#4a2c0a"/><circle cx="1.5" cy="10" r="1.2" fill="#4a2c0a"/></g>`;
+an+=`<g id="jg"><ellipse cy="1" rx="50" ry="5" fill="#000" opacity=".22"/><g id="jt"><path d="M42,-30 q30,-6 34,-30" stroke="#e0a82e" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M42,-30 q30,-6 34,-30" stroke="#4a2c0a" stroke-width="7" fill="none" stroke-dasharray="3 7" opacity=".7"/><circle cx="76" cy="-60" r="3.8" fill="#4a2c0a"/></g>${lg('jf2','#b57f1f')}${lg('jh2','#b57f1f')}<g id="jb"><ellipse cx="-34" cy="-30" rx="15" ry="12" fill="#e0a82e"/><ellipse cy="-28" rx="44" ry="15" fill="#e0a82e"/><ellipse cx="-2" cy="-19" rx="34" ry="6" fill="#f0cf86"/>${sp}</g>${lg('jf1','#e0a82e')}${lg('jh1','#e0a82e')}<g id="jh"><circle cx="6" cy="-11" r="4.6" fill="#b57f1f"/><ellipse cx="6" cy="2" rx="8" ry="9" fill="#d19a28"/><circle cx="-8" cy="0" r="13" fill="#e0a82e"/><circle cx="-4" cy="-12" r="4.6" fill="#e0a82e"/><circle cx="-4" cy="-12" r="2.2" fill="#7a4a1a"/><ellipse cx="-19" cy="4" rx="8.5" ry="6.5" fill="#f4dc9a"/><ellipse cx="-26" cy="1" rx="2.8" ry="2.2" fill="#3a2a2a"/><path d="M-26,3 q3,6 9,3" stroke="#3a2a2a" stroke-width="1.4" fill="none"/><g id="je"><circle cx="-11" cy="-4" r="3.2" fill="#f5d24a"/><ellipse cx="-11" cy="-4" rx="1.3" ry="2.4" fill="#111"/></g><path id="jc" d="M-14,-4 q3,3 6,0" stroke="#3a2208" stroke-width="1.6" fill="none" display="none"/><path d="M-22,2 l-14,-3 M-22,4 l-14,3" stroke="#fff" stroke-width=".9" opacity=".8"/><circle cx="-4" cy="6" r="1.3" fill="#4a2c0a"/><circle cx="2" cy="-3" r="1.3" fill="#4a2c0a"/><circle cx="-1" cy="-8" r="1.2" fill="#4a2c0a"/><circle cx="-15" cy="6" r="1" fill="#4a2c0a"/></g></g><g id="jz">${[0,1,2].map(i=>`<text font-family="Georgia,serif" font-style="italic" font-size="${13+i*3}" fill="#fff" opacity="0">z</text>`).join('')}</g>`;
+an+=`<g id="hg" transform="translate(1020,${WL+70})"><path d="M-3,0 v-52 M4,0 v-52" stroke="#8a6d3b" stroke-width="2.5"/><path d="M-3,0 l-7,2 M4,0 l7,2" stroke="#8a6d3b" stroke-width="2" stroke-linecap="round"/><path d="M20,-62 l17,7 -17,-3z" fill="#e3e6ea"/><ellipse cy="-62" rx="24" ry="11" fill="#f7f7f7"/><path d="M-14,-62 q14,-10 34,-2 q-14,12 -34,2z" fill="#e1e5ea"/><path id="hn" d="" stroke="#f7f7f7" stroke-width="6" fill="none" stroke-linecap="round"/><g id="hh"><circle r="6" fill="#f7f7f7"/><path d="M-5,0 l-24,5" stroke="#e8a21a" stroke-width="3" stroke-linecap="round"/><circle cx="-2" cy="-1.5" r="1.4" fill="#111"/><path d="M3,-3 l10,-3" stroke="#222" stroke-width="2" stroke-linecap="round"/></g><path id="hf" d="M-10,0 q8,-5 16,0 q-8,5 -16,0 M6,0 l6,-4 v8z" fill="#ffb347" display="none"/><ellipse id="hr1" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="1.6" opacity="0"/><ellipse id="hr2" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="1.6" opacity="0"/>${[0,1,2,3,4,5].map(i=>`<circle id="hd${i}" r="2" fill="#fff" opacity="0"/>`).join('')}</g>`;
+$('an').innerHTML=an;
+
+// оживление ягуара и цапли
+const J={x:560,dir:-1,mv:0,lie:0,ph:0,st:'idle',tm:1,tx:560},H={next:2.5,t0:-9,c:0},G=id=>document.getElementById(id),el={};
+['jg','jt','jb','jh','jf1','jf2','jh1','jh2','je','jc','jz','hn','hh','hf','hr1','hr2'].forEach(i=>el[i]=G(i));
+function jstep(dt){J.tm-=dt;const lt=J.st=='sleep'?1:0;J.lie+=(lt-J.lie)*Math.min(1,dt*2);
+ if(J.st=='walk'){if(J.lie<.12){const d=J.tx-J.x;J.dir=d>0?1:-1;J.mv+=(1-J.mv)*Math.min(1,dt*4);J.x+=J.dir*Math.min(Math.abs(d),26*dt*J.mv);J.ph+=26*dt*J.mv*.16;if(Math.abs(d)<3){J.st=R()<.35?'sleep':'idle';J.tm=J.st=='sleep'?P(9,14):P(2,4)}}}
+ else{J.mv+=(0-J.mv)*Math.min(1,dt*5);if(J.tm<=0){if(J.st=='sleep'&&J.lie>.1){J.st='idle';J.tm=1.2}else{J.st='walk';let n;do{n=P(430,800)}while(Math.abs(n-J.x)<140);J.tx=n}}}}
+function jup(t){const l=J.lie,dr=13*l,mv=J.mv,hy=-17+dr,wa=o=>28*mv*Math.sin(J.ph+o),sl=(h,a)=>`translate(${h} ${hy}) rotate(${a})`;
+ el.jf1.setAttribute('transform',sl(-30,wa(0)*(1-l)+85*l));el.jh2.setAttribute('transform',sl(28,wa(0)*(1-l)-62*l));
+ el.jf2.setAttribute('transform',sl(-20,wa(Math.PI)*(1-l)+78*l));el.jh1.setAttribute('transform',sl(36,wa(Math.PI)*(1-l)-70*l));
+ const br=l>.8?Math.sin(t*2.2)*.9:0,bob=-Math.abs(Math.sin(J.ph))*1.6*mv,y=dr+br+bob,sleepy=l>.75||(t%4.3)<.14;
+ el.jb.setAttribute('transform',`translate(0 ${y})`);
+ el.jh.setAttribute('transform',`translate(${-46-6*l} ${-32+y+4*l}) rotate(${-15*l+3*Math.sin(J.ph*2)*mv})`);
+ el.jt.setAttribute('transform',`translate(0 ${dr}) rotate(${14*Math.sin(t*1.7)*(1-l)-25*l} 42 -30)`);
+ el.je.setAttribute('display',sleepy?'none':'inline');el.jc.setAttribute('display',sleepy?'inline':'none');
+ el.jg.setAttribute('transform',`translate(${J.x} ${WL+34}) scale(${-J.dir*1.15} 1.15)`);
+ [...el.jz.children].forEach((z,i)=>{const p=(t*.5+i*.33)%1,on=l>.9;z.setAttribute('opacity',on?1-p:0);z.setAttribute('transform',`translate(${J.x+J.dir*62+i*7} ${WL+6-p*40})`)})}
+function hup(t){if(t>H.next){H.t0=t;H.c++;H.next=t+P(7,12)}
+ const u=t-H.t0;let s=0;if(u>=0&&u<1.8){s=u<.45?-.25*Math.sin(u/.45*Math.PI/2):u<.6?-.25+1.25*((u-.45)/.15):u<1?1:1-(u-1)/.8}
+ const sw=(u<0||u>=1.8)?Math.sin(t*1.1)*1.2:0,hx=-38-28*s,hy=-120+122*s+sw,an2=-70*s,rd=an2*Math.PI/180;
+ el.hn.setAttribute('d',`M-16,-66 C-34,-70 ${hx+12},${hy+18-46*s} ${hx},${hy}`);
+ el.hh.setAttribute('transform',`translate(${hx} ${hy}) rotate(${an2})`);
+ const show=H.c%2==0&&u>1&&u<1.8&&s>.15;el.hf.setAttribute('display',show?'inline':'none');
+ if(show){const tx=hx+(-29*Math.cos(rd)-5*Math.sin(rd)),ty=hy+(-29*Math.sin(rd)+5*Math.cos(rd));el.hf.setAttribute('transform',`translate(${tx} ${ty}) rotate(${an2})`)}
+ [['hr1',.6],['hr2',.9]].forEach(([id,h])=>{const k=(u-h)/1.6,e=el[id],on=k>0&&k<1;e.setAttribute('opacity',on?.8*(1-k):0);if(on)e.setAttribute('transform',`translate(-66 4) scale(${1+4*k})`)});
+ const vx=[-34,-18,-6,8,22,36],vy=[90,120,100,130,110,85],tt=u-.6;
+ vx.forEach((v,i)=>{const d=G('hd'+i),on=tt>0&&tt<.6;d.setAttribute('opacity',on?1-tt/.6:0);if(on){d.setAttribute('cx',-66+v*tt);d.setAttribute('cy',2-vy[i]*tt+120*tt*tt)}})}
+let lt0=0;const loop=ts=>{const t=ts/1000,dt=Math.min(.05,t-lt0);lt0=t;jstep(dt);jup(t);hup(t);requestAnimationFrame(loop)};
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){jup(0);hup(0)}else requestAnimationFrame(loop);
+let ff='';for(let i=0;i<40;i++)ff+=`<circle cx="${P(440,860)}" cy="${P(2300,4200)}" r="${P(1.5,3.5)}" fill="#f2ff9c" opacity=".1" class="ff" style="animation-delay:-${R()*3}s;animation-duration:${2+R()*3}s"/>`;
+$('ff').innerHTML=ff;
+const lf='M0,0 Q100,-35 210,-6 Q100,-14 0,0Z';let fg='';
+for(let i=0;i<9;i++){const cl=i%2?'#1f6b3a':'#2a8a4a',an2=14+i*9;fg+=`<path d="${lf}" transform="translate(0,5000) rotate(${-an2})" fill="${cl}"/><path d="${lf}" transform="translate(1200,5000) scale(-1,1) rotate(${-an2})" fill="${cl}"/>`}
+$('fg').innerHTML=fg;
+
+// интерфейс
+const A=$('alt'),B=A.querySelector('b');
+const u=()=>{const m=document.documentElement.scrollHeight-innerHeight,p=Math.min(1,Math.max(0,scrollY/m));B.textContent=Math.round(480*(1-p));A.style.setProperty('--p',p)};
+addEventListener('scroll',u,{passive:true});u();
+$('up').addEventListener('click',()=>{try{$('top').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){scrollTo(0,0)}});
+$('go').addEventListener('click',()=>{try{$('c1').scrollIntoView({behavior:'smooth',block:'center'})}catch(e){scrollTo(0,innerHeight)}});
+let st={};try{st=JSON.parse(localStorage.getItem('eco')||'{}')}catch(e){}
+const bx=[...document.querySelectorAll('.ck input')],cn=$('cn');
+const cnt=()=>cn.textContent='Выбрано: '+bx.filter(i=>i.checked).length+' из '+bx.length;
+bx.forEach((i,k)=>{i.checked=!!st[k];i.addEventListener('change',()=>{st[k]=i.checked;try{localStorage.setItem('eco',JSON.stringify(st))}catch(e){}cnt()})});cnt();
+</script>
+</body></html>
